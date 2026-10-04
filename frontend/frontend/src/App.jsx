@@ -313,46 +313,7 @@ export function App() {
     });
 
     const mm = gsap.matchMedia();
-    mm.add('(min-width:800px)', () => {
-      const tr = $('.track');
-      const work = $('.work');
-      if (!tr || !work) return;
-
-      // Force the layout this animation needs, so it doesn't depend on CSS
-      tr.style.display = 'flex';
-      tr.style.flexWrap = 'nowrap';
-      tr.style.width = 'max-content';
-      $$('.card', tr).forEach((c) => {
-        c.style.flexShrink = '0';
-      });
-
-      const getDistance = () =>
-        Math.max(0, tr.scrollWidth - window.innerWidth + window.innerWidth * 0.05);
-
-      gsap.to(tr, {
-        x: () => -getDistance(),
-        ease: 'none',
-        scrollTrigger: {
-          trigger: work,
-          start: 'top top',
-          end: () => '+=' + Math.max(400, getDistance()),
-          pin: true,
-          pinSpacing: true,
-          scrub: 1,
-          invalidateOnRefresh: true,
-          anticipatePin: 1,
-        },
-      });
-
-      return () => {
-        tr.style.removeProperty('display');
-        tr.style.removeProperty('flex-wrap');
-        tr.style.removeProperty('width');
-        $$('.card', tr).forEach((c) => c.style.removeProperty('flex-shrink'));
-      };
-    });
-
-    mm.add('(max-width:799px)', () => {
+    mm.add('(min-width:0px)', () => {
       gsap.from('.card', {
         y: 50,
         opacity: 0,
@@ -521,7 +482,23 @@ export function App() {
       {/* Horizontal Pinned Track: Selected Works */}
       <section className="work" id="work">
         <h2>Selected work</h2>
-        <div className="track">
+        <div
+          className="track"
+          ref={trackRef}
+          onScroll={handleTrackScroll}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUpOrLeave}
+          onMouseLeave={handleMouseUpOrLeave}
+          style={{
+            width: '100%',
+            overflowX: 'auto',
+            overflowY: 'hidden',
+            scrollSnapType: 'x proximity',
+            cursor: 'grab',
+            paddingBottom: '16px',
+          }}
+        >
           {/* Project 1: Konkani Farmer ASR */}
           <article className="card">
             <div className="art">Whisper + LoRA</div>
@@ -672,6 +649,13 @@ export function App() {
               <em>Python</em>
             </div>
           </article>
+        </div>
+        <div style={{ display: 'flex', gap: '12px', padding: '16px 5vw 0', alignItems: 'center' }}>
+          <button type="button" onClick={() => scrollWork('prev')} aria-label="Previous project"
+            style={{ width: 48, height: 48, borderRadius: '50%', border: '2px solid var(--ink)', background: 'transparent', color: 'var(--ink)', fontSize: 22, cursor: 'pointer' }}>←</button>
+          <button type="button" onClick={() => scrollWork('next')} aria-label="Next project"
+            style={{ width: 48, height: 48, borderRadius: '50%', border: '2px solid var(--ink)', background: 'transparent', color: 'var(--ink)', fontSize: 22, cursor: 'pointer' }}>→</button>
+          <span style={{ marginLeft: 8, fontWeight: 700 }}>{activeWorkIndex + 1} / 6</span>
         </div>
       </section>
 
