@@ -315,21 +315,41 @@ export function App() {
     const mm = gsap.matchMedia();
     mm.add('(min-width:800px)', () => {
       const tr = $('.track');
-      if (tr) {
-        gsap.to(tr, {
-          x: () => -Math.max(0, tr.scrollWidth - window.innerWidth + window.innerWidth * 0.05),
-          ease: 'none',
-          scrollTrigger: {
-            trigger: '.work',
-            start: 'top top',
-            end: () => '+=' + Math.max(200, tr.scrollWidth - window.innerWidth),
-            pin: true,
-            scrub: 1,
-            invalidateOnRefresh: true,
-            anticipatePin: 1,
-          },
-        });
-      }
+      const work = $('.work');
+      if (!tr || !work) return;
+
+      // Force the layout this animation needs, so it doesn't depend on CSS
+      tr.style.display = 'flex';
+      tr.style.flexWrap = 'nowrap';
+      tr.style.width = 'max-content';
+      $$('.card', tr).forEach((c) => {
+        c.style.flexShrink = '0';
+      });
+
+      const getDistance = () =>
+        Math.max(0, tr.scrollWidth - window.innerWidth + window.innerWidth * 0.05);
+
+      gsap.to(tr, {
+        x: () => -getDistance(),
+        ease: 'none',
+        scrollTrigger: {
+          trigger: work,
+          start: 'top top',
+          end: () => '+=' + Math.max(400, getDistance()),
+          pin: true,
+          pinSpacing: true,
+          scrub: 1,
+          invalidateOnRefresh: true,
+          anticipatePin: 1,
+        },
+      });
+
+      return () => {
+        tr.style.removeProperty('display');
+        tr.style.removeProperty('flex-wrap');
+        tr.style.removeProperty('width');
+        $$('.card', tr).forEach((c) => c.style.removeProperty('flex-shrink'));
+      };
     });
 
     mm.add('(max-width:799px)', () => {
@@ -350,7 +370,24 @@ export function App() {
       })
     );
 
+    /* Re-measure once fonts and images have loaded (fixes the horizontal
+       scroll not moving on deployed sites like GitHub Pages) */
+    const refresh = () => ScrollTrigger.refresh();
+    window.addEventListener('load', refresh);
+    const t1 = setTimeout(refresh, 600);
+    const t2 = setTimeout(refresh, 1800);
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(refresh);
+    }
+    $$('img').forEach((img) => {
+      if (!img.complete) img.addEventListener('load', refresh, { once: true });
+    });
+
     return () => {
+      window.removeEventListener('load', refresh);
+      clearTimeout(t1);
+      clearTimeout(t2);
+      mm.revert();
       if (lenis) {
         if (tickerFn) gsap.ticker.remove(tickerFn);
         lenis.destroy();
