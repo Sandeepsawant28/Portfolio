@@ -389,6 +389,7 @@ export function App() {
         <aside className="facts">
           <p>Based in Goa, India</p>
           <p>BE Computer, Don Bosco College of Engineering, 2026</p>
+          <p>Cultural Secretary, Don Bosco College of Engineering</p>
           <p>Full-stack, AI/ML, speech recognition</p>
           <p>Open to software engineering roles</p>
         </aside>
@@ -400,7 +401,7 @@ export function App() {
 
         <div className="hero-foot">
           <p>
-            Final-year <b>Computer Engineering</b> student. Full-stack developer and AI/ML research intern fine-tuning speech recognition models.
+            Final-year <b>Computer Engineering</b> student and <b>Cultural Secretary</b> of Don Bosco College of Engineering. Full-stack developer and AI/ML research intern fine-tuning speech recognition models.
           </p>
         </div>
       </header>
@@ -756,6 +757,19 @@ export function App() {
             <li>Co-authored a research paper on Konkani speech resources and the dataset.</li>
           </ul>
         </div>
+        <div className="svc">
+          <span className="rule"></span>
+          <h3>
+            Cultural Secretary
+            <small>
+              Student Council, Don Bosco College of Engineering
+            </small>
+          </h3>
+          <ul>
+            <li>Lead the college's cultural activities as an elected member of the student council.</li>
+            <li>Coordinate student teams, faculty and event logistics for cultural festivals and college events.</li>
+          </ul>
+        </div>
       </section>
 
       {/* Moments & Milestones Gallery Section */}
@@ -764,7 +778,7 @@ export function App() {
           <span className="gallery-tag">Photographic Record · Highlights</span>
           <h2 className="gallery-title">Moments &amp; Milestones</h2>
           <p className="gallery-lead">
-            Visual records spanning executive student council leadership, 1st place &amp; national runner-up project expo honors, speech AI research labs, robotics tracks, and varsity athletics.
+            Visual records spanning student council leadership as Cultural Secretary, 1st place &amp; national runner-up project expo honors, speech AI research labs, robotics tracks, and varsity athletics.
           </p>
         </div>
 
@@ -924,7 +938,7 @@ export function App() {
           <span className="rule"></span>
           <h3>Beyond code</h3>
           <p>
-            Inter-College Hockey Championship player. Built the{' '}
+            Cultural Secretary, Don Bosco College of Engineering. Inter-College Hockey Championship player. Built the{' '}
             <a
               className="u"
               href="https://dbce-futsal-league-5.onrender.com"
